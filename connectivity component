@@ -1,0 +1,48 @@
+#include <iostream>
+#include <set>
+#include <vector>
+#include <algorithm>
+
+void dfs(int v, std::vector<int>& visited, std::vector<std::vector<int>>& spis)
+{
+    visited[v]=1;
+    for (auto const& vex: spis[v])
+    {
+        if (!visited[vex])
+        {
+            dfs(vex, visited, spis);
+        }
+    }
+}
+
+
+
+
+int main()
+{
+    int n,m,c=0;
+    std::cin>>n>>m;
+    std::vector<int> visited(n);
+    std::vector<std::vector<int>> spis(n, std::vector<int>(n));
+    for (int i=0; i<m; i++)
+    {
+        int u, v=0;
+        std::cin>>u>>v;
+        spis[u-1].push_back(v-1);
+        spis[v-1].push_back(u-1);
+    }
+
+    for (int i=0; i<n; i++)
+    {
+        if (!visited[i])
+        {
+            dfs(i, visited, spis);
+            ++c;
+        }
+    }
+    if (c==1)
+    {
+        std::cout<<"YES";
+    } else {std::cout<<"NO";}
+
+}
