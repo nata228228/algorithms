@@ -1,0 +1,75 @@
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+void dfs(int u, int p, int& timer, const std::vector<std::vector<int>>& adj, std::vector<int>& disc, std::vector<int>& low, std::vector<bool>& is_articulation) {
+    disc[u] = low[u] = ++timer;
+    int children = 0;
+
+    for (int v : adj[u])
+    {
+        if (v == p) {
+            continue;
+        }
+        if (disc[v])
+        {
+            low[u] = std::min(low[u], disc[v]);
+        } else
+        {
+            children++;
+            dfs(v, u, timer, adj, disc, low, is_articulation);
+            low[u] = std::min(low[u], low[v]);
+            if (p != -1 && low[v] >= disc[u])
+            {
+                is_articulation[u] = true;
+            }
+        }
+    }
+    if (p == -1 && children > 1)
+    {
+        is_articulation[u] = true;
+    }
+}
+
+int main() {
+    int n, m;
+    std::cin >> n >> m;
+    std::vector<std::vector<int>> adj(n + 1);
+    std::vector<int> disc(n + 1, 0);
+    std::vector<int> low(n + 1, 0);
+    std::vector<bool> is_articulation(n + 1, false);
+    int timer = 0;
+
+    for (int i = 0; i < m; ++i) {
+        int u, v;
+        std::cin >> u >> v;
+        if (u == v)
+        {
+            continue;
+        }
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    for (int i = 1; i <= n; ++i) {
+        if (!disc[i])
+        {
+            dfs(i, -1, timer, adj, disc, low, is_articulation);
+        }
+    }
+
+    std::vector<int> result;
+    for (int i = 1; i <= n; ++i) {
+        if (is_articulation[i])
+        {
+            result.push_back(i);
+        }
+    }
+
+    std::cout << result.size() << '\n';
+    for (size_t i = 0; i < result.size(); ++i)
+    {
+        std::cout << result[i] << '\n';
+    }
+    return 0;
+}
