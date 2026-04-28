@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+
+
+
+
+
+void dfs(int v, std::vector<int>& visited, std::vector<std::vector<int>>& spis, int& loop, int p)
+{
+    visited[v]= 1;
+    for (auto const& vex: spis[v])
+    {
+        if (visited[vex]==0)
+        {
+            // p=v;
+            dfs(vex, visited, spis, loop, v);
+        }
+        else if (visited[vex]==1)
+        {
+            ++loop;
+        }
+
+    }
+    visited[v]= 2;
+}
+
+
+
+
+int main()
+{
+    int n=0,loop=0;
+    std::cin>>n;
+    std::vector<int> visited(n, 0);
+    std::vector<std::vector<int>> spis(n);
+
+    for (int i=0; i<n; ++i)
+    {
+        for (int j=0; j<n; ++j)
+        {
+            int lovushka_dzhokera=0;
+            std::cin>>lovushka_dzhokera;
+            if (lovushka_dzhokera==1)
+            {
+                spis[i].push_back(j);
+            }
+        }
+    }
+
+
+
+    for (int i=0; i<n; i++)
+    {
+        if (visited[i]==0)
+        {
+            dfs(i, visited, spis, loop, i);
+        }
+
+    }
+    if (loop==0 )
+    {
+        std::cout<<"0"<<'\n';
+    } else
+    {
+        std::cout<<"1"<<'\n';
+    }
+}
