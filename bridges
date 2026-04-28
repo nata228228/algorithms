@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <functional>
+
+
+std::vector<int> criticalConnections(int n, std::vector<std::vector<std::pair<int, int>>>& adj)
+{
+    std::vector<int> disc(n, -1);
+    std::vector<int> low(n, -1);
+    std::vector<int> result_ids;
+    int time = 0;
+
+    std::function<void(int, int)> dfs = [&](int u, int p_edge) {
+        disc[u] = low[u] = time++;
+
+        for (auto &edge : adj[u]) {
+            int v = edge.first;
+            int edge_id = edge.second;
+
+            if (edge_id == p_edge) continue;
+
+            if (disc[v] == -1) {
+                dfs(v, edge_id);
+                low[u] = std::min(low[u], low[v]);
+                if (low[v] > disc[u]) {
+                    result_ids.push_back(edge_id);
+                }
+            } else {
+                low[u] = std::min(low[u], disc[v]);
+            }
+        }
+    };
+
+    for (int i = 0; i < n; ++i) {
+        if (disc[i] == -1) {
+            dfs(i, -1);
+        }
+    }
+
+    return result_ids;
+}
+
+int main() {
+
+    int n, m;
+    std::cin >> n >> m;
+
+    std::vector<std::vector<std::pair<int, int>>> adj(n);
+    for (int i = 1; i <= m; ++i) {
+        int u, v;
+        std::cin >> u >> v;
+        adj[u-1].push_back({v-1, i});
+        adj[v-1].push_back({u-1, i});
+    }
+
+    auto bridge_ids = criticalConnections(n, adj);
+
+    std::sort(bridge_ids.begin(), bridge_ids.end());
+
+    std::cout << bridge_ids.size() << "\n";
+    for (int i = 0; i < bridge_ids.size(); ++i) {
+        std::cout << bridge_ids[i] << (i == bridge_ids.size() - 1 ? "" : " ");
+    }
+
+    return 0;
+}
