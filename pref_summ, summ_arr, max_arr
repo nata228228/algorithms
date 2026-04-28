@@ -1,0 +1,51 @@
+def pref_summ_2d(m):
+    n = len(m)
+    p = [[0] * n for _ in range(n)]
+    for i in range(1, n):
+        for j in range(1, n):
+            p[i][j] = p[i-1][j] + p[i][j-1] - p[i-1][j-1] + m[i][j]
+    return p
+
+
+
+
+
+
+def sum_arr(left: int, right: int) -> int:
+    s = 0
+    while left <= right:
+        # если left и right в разных блоках и left стоит в начале блока
+        if left // size_block != right // size_block and left % size_block == 0:
+            s += block[left // size_block]
+            left += size_block
+        else:
+            s += a[left]
+            left += 1
+    return s
+
+
+
+
+
+
+
+
+
+
+
+block = [-inf] * (len(a) // size_block + 1)
+
+for i in range(len(arr)):
+    block[i // size_block] = max(block[i // size_block], arr[i])
+
+def max_arr(left: int, right: int) -> int:
+    ans = -inf
+    while left <= right:
+        # если left и right в разных блоках и left стоит в начале блока
+        if left // size_block != right // size_block and left % size_block == 0:
+            ans = max(block[left // size_block], ans)
+            left += size_block
+        else:
+            ans = max(arr[left], ans)
+            left += 1
+    return ans
