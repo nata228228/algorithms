@@ -1,0 +1,34 @@
+def bin_first(a, k):    # первое вхождение
+    l, r = -1, len(a)
+    while l + 1 < r:
+        m = (l + r) // 2
+        if a[m] < k:
+            l = m
+        else:
+            r = m
+
+    if r != len(a) and a[r] == k:
+        return r
+    else:
+        return 'нет такого элемента'
+
+
+
+def bin_last(a, k):     # последнее вхождение
+    l, r = -1, len(a)
+    while l + 1 < r:
+        m = (l + r) // 2
+        if a[m] <= k:
+            l = m
+        else:
+            r = m
+
+    if l != -1 and a[l] == k:
+        return l
+    else:
+        return 'нет такого элемента'
+
+
+
+
+        
