@@ -1,0 +1,60 @@
+#include <iostream>
+#include <vector>
+
+
+
+
+
+void dfs(int v, std::vector<int>& visited, std::vector<std::vector<int>>& spis, int& flag, int color)
+{
+    visited[v]= color;
+    for (auto const& vex: spis[v])
+    {
+        if (visited[vex]==0)
+        {
+            // p=v;
+            dfs(vex, visited, spis, flag, 3-color);
+        }
+        else if (visited[vex]==color)
+           {
+               ++flag;
+               break;
+           }
+        }
+
+    }
+
+
+
+
+
+int main()
+{
+    int n=0,m=0,flag=0,color=1;
+    std::cin>>n>>m;
+    std::vector<int> visited(n, 0);
+    std::vector<std::vector<int>> spis(n);
+    for (int i=0; i<m; i++)
+    {
+        int u, v=0;
+        std::cin>>u>>v;
+        spis[u-1].push_back(v-1);
+        spis[v-1].push_back(u-1);
+    }
+
+    for (int i=0; i<n; i++)
+    {
+        if (visited[i]==0)
+        {
+            dfs(i, visited, spis, flag, color);
+        }
+
+    }
+    if (flag==0)
+    {
+        std::cout<<"YES"<<'\n';
+    } else
+    {
+        std::cout<<"NO"<<'\n';
+    }
+}
